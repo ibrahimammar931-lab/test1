@@ -8,7 +8,12 @@ from schemas.task import TaskCreate, TaskUpdate
 
 
 def create_task(db: Session, data: TaskCreate) -> Task:
-    task = Task(title=data.title, description=data.description, project_id=data.project_id)
+    task = Task(
+        title=data.title,
+        description=data.description,
+        due_date=data.due_date,
+        project_id=data.project_id,
+    )
     db.add(task)
     db.commit()
     db.refresh(task)
