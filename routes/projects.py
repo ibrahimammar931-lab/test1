@@ -8,6 +8,7 @@ from models.project import Project
 from models.user import User
 from schemas.project import ProjectCreate, ProjectResponse, ProjectUpdate
 from services.auth_service import get_current_user
+from services.project_service import delete_project
 
 router = APIRouter(prefix="/projects", tags=["projects"])
 
@@ -67,3 +68,12 @@ def update_project(
     db.commit()
     db.refresh(project)
     return project
+
+
+@router.delete("/{project_id}", status_code=status.HTTP_204_NO_CONTENT)
+def remove_project(
+    project_id: str,
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user),
+) -> None:
+    delete_project(db, project_id, current_user.id)
