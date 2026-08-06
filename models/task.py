@@ -1,12 +1,11 @@
 from __future__ import annotations
 
 import uuid
-
-from sqlalchemy import ForeignKey, String
+from datetime import date
+from sqlalchemy import ForeignKey, String, Date
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from database import Base
-
 
 class Task(Base):
     __tablename__ = "tasks"
@@ -17,5 +16,6 @@ class Task(Base):
     # Pre-Ticket-9 baseline: plain free-text status, not yet an enum.
     status: Mapped[str] = mapped_column(String, default="todo", nullable=False)
     project_id: Mapped[str] = mapped_column(String, ForeignKey("projects.id"), nullable=False)
+    due_date: Mapped[date | None] = mapped_column(Date, nullable=True)
 
     project = relationship("Project", back_populates="tasks")
